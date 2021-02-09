@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: monospace;
 }
 
 .App-logo {
@@ -35,4 +36,71 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.todo_list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.todo_subtask {
+  margin-left: 10%;
+  /* background-color: #abdbe3; */
+}
+
+.todo_task{
+  /* background-color: lightpink; */
+}
+/* #container { border: 1px solid red; padding: 20px; }
+#76b5c5
+#abdbe3
+#063970;*/
+
+.todo__item {
+  border-radius: 18px;
+  padding: 0.5rem;
+  margin: 0.7rem;
+  background-color: #063970 ; 
+  color: white;
+  box-shadow: 5px 10px 8px #888888;
+}
+
+.todo__itemSubtask{
+  border-radius: 18px;
+  padding: 0.5rem;
+  margin: 0.7rem;
+  box-shadow: 5px 10px 8px #888888;
+  background-color: #6a88a9 ;
+  color: white;
+}
+.todo__item .MuiIconButton-root{
+  color: white;
+}
+.todo__itemSubtask .MuiIconButton-root{
+  color: white;
+}
+
+span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypography-displayBlock {
+  font-size: 19px;
+  word-wrap: break-word !important;
+  margin-right: 4rem;
+}
+
+.todo__input .MuiInputBase-root .MuiInput-root{
+  border: 0.5px solid lightgray;
+  border-radius: 31px;
+  border-bottom: none;
+  padding: 5px;
+  padding-left: 12px;
+  margin: 7px;
+}
+.MuiInputBase-input{
+  border: 0.5px solid #063970 !important;
+  border-radius: 31px !important;
+  padding: 7px !important;
+  padding-left: 12px !important;
+  margin: 7px !important;
 }

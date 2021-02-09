@@ -8,10 +8,10 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/auth">
+          <Route exact path="/">
             <Login/>
           </Route>
-          <Route exact path="/">
+          <Route exact path="/todos">
             <TodoList/>
           </Route>
         </Switch>

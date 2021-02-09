@@ -104,3 +104,48 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
   padding-left: 12px !important;
   margin: 7px !important;
 }
+.login {
+  height: 100vh;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid black; */
+  margin: auto;
+}
+.login_container input{
+  padding: 0.7rem;
+    width: 100%;
+    margin: 1rem;
+    border: 0.5px solid lightgray;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.login_container h1{
+  margin-left: 3rem;
+}
+
+.login_container button{
+  padding: 0.7rem;
+  margin: 1rem;
+  width: 70%;
+  border: 0.5px solid lightgray;
+  border-radius: 2rem;
+  background-color: #063970;
+  color: white;
+  font-size: medium;
+  cursor: pointer;
+  outline: none;
+  margin-left: 4rem;
+}
+
+.login_buttons{
+  display:flex
+}
+.login_buttons {
+  display: flex;
+  width: 119%;
+  
+  /* margin-left: 0.4rem; */
+} 

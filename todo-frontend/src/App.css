@@ -61,7 +61,7 @@
 
 .todo__item {
   border-radius: 18px;
-  padding: 0.5rem;
+  padding: 0.3rem;
   margin: 0.7rem;
   background-color: #063970 ; 
   color: white;
@@ -70,7 +70,7 @@
 
 .todo__itemSubtask{
   border-radius: 18px;
-  padding: 0.5rem;
+  padding: 0.3rem;
   margin: 0.7rem;
   box-shadow: 5px 10px 8px #888888;
   background-color: #6a88a9 ;
@@ -84,7 +84,7 @@
 }
 
 span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypography-displayBlock {
-  font-size: 19px;
+  font-size: 14px;
   word-wrap: break-word !important;
   margin-right: 4rem;
 }
@@ -96,6 +96,7 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
   padding: 5px;
   padding-left: 12px;
   margin: 7px;
+  font-size: 0.7rem !important;
 }
 .MuiInputBase-input{
   border: 0.5px solid #063970 !important;
@@ -104,6 +105,7 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
   padding-left: 12px !important;
   margin: 7px !important;
 }
+
 .login {
   height: 100vh;
   width: 50%;
@@ -115,11 +117,11 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
 }
 .login_container input{
   padding: 0.7rem;
-    width: 100%;
-    margin: 1rem;
-    border: 0.5px solid lightgray;
-    border-radius: 1rem;
-    outline: none;
+  width: 100%;
+  margin: 1rem;
+  border: 0.5px solid lightgray;
+  border-radius: 1rem;
+  outline: none;
 }
 
 .login_container h1{
@@ -134,7 +136,7 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
   border-radius: 2rem;
   background-color: #063970;
   color: white;
-  font-size: medium;
+  font-size: small;
   cursor: pointer;
   outline: none;
   margin-left: 4rem;
@@ -149,3 +151,17 @@ span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypograph
   
   /* margin-left: 0.4rem; */
 } 
+
+.todo_header {
+  /* display: flex; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2re;
+  padding: 2re;
+}
+
+.todo_header a{
+  margin-left:3rem;
+  font-size: 1rem;
+}

@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const db = require('./mongo');
 const UsersModel = require('./models/user.model');
-const ExpenseModel = require('./models/expsens.model');
+const Event = require('./models/event.model');
 var cors = require('cors');
-const asyncLib = require('async');
-let _ = require('lodash');
+const auth = require('./auth');
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
@@ -17,14 +15,133 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(cors());
+app.post('/login', async (req, res) => {
+    try {
+        const data = await UsersModel.find({
+            username: req.body.username,
+            password: req.body.password
+        });
+        if (data && data.length) {
+            const token = auth.createJWT(req.body);
+            return res.status(200).json({
+                message: 'Login success',
+                token
+            })
+        } else {
+            return res.status(400).json({
+                message: 'Login Failed'
+            })
+        }
+    } catch (err) {
+        return res.status(500).jsonp({
+            error: err
+        });
+    }
+});
+
+app.post('/todos', auth.ensureAuthenticated, async(req,res)=>{
+    console.log(req.body)
+    // const user = auth.decodeToken(req.headers.authorization,)
+    const {username} = req.userInfo;
+    console.log('---- ',req.userInfo)
+    var e = new Event({...req.body,username});
+    console.log('db todo',e)
+    try {
+        e = await e.save(req.body);
+        return res.status(201).json({
+            message: " todo created ",
+            e
+        });
+    } catch (err) {
+        return res.status(500).jsonp({
+            error: err
+        });
+    }
+});
+
+app.get('/todos', auth.ensureAuthenticated, async(req,res)=>{
+    console.log('todo get all records ')
+    try {
+        const {username} = req.userInfo;
+        const data = await Event.find({username: username});
+        if (data) {
+            return res.status(200).json({
+                message: 'success',
+                data
+            })
+        } else {
+            return res.status(400).json({
+                message: 'Failed'
+            })
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: err
+        });
+    }
+});
+
+app.put('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
+    console.log('todo updating call id ',req.params.id,req.body)
+    try {
+        let data = await Event.findOne({
+            id: req.params.id
+        });
+        let updateTodo = await Event.updateOne({
+            _id: data._id
+        }, req.body);
+
+        if (updateTodo) {
+            return res.status(200).json({
+                message: 'success',
+                updateTodo
+            })
+        } else {
+            return res.status(400).json({
+                message: 'Failed'
+            })
+        }
+    } catch (err) {
+        console.log('error while updating todos : ',err);
+        return res.status(500).json({
+            error: err
+        });
+    }
+});
+
+
+app.delete('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
+    console.log('todo deleting call id ',req.params.id)
+    try {
+        let data = await Event.deleteOne({
+            id: req.params.id
+        });
+        if (data) {
+            return res.status(200).json({
+                message: 'success',
+                data
+            })
+        } else {
+            return res.status(400).json({
+                message: 'Failed'
+            })
+        }
+    } catch (err) {
+        console.log('error while deleting todos : ',err);
+        return res.status(500).json({
+            error: err
+        });
+    }
+});
+
 
 app.post('/signup', async (req, res) => {
-    console.log(req.body)
+    console.log('signup body ->',req.body)
     let userInfo = new UsersModel(req.body);
     const data = await UsersModel.find({
-        email: req.body.email
+        username: req.body.username
     });
-    console.log(data)
     if (data && data.length) {
         return res.status(200).json({
             message: " user already exist ",
@@ -44,147 +161,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
-    try {
-        const data = await UsersModel.find({
-            username: req.body.username,
-            password: req.body.password
-        });
-        if (data && data.length) {
-            return res.status(200).json({
-                message: 'Login success'
-            })
-        } else {
-            return res.status(400).json({
-                message: 'Login Failed'
-            })
-        }
-    } catch (err) {
-        return res.status(500).jsonp({
-            error: err
-        });
-    }
-});
 
-app.get('/users', async (req, res) => {
-    try {
-        const data = await UsersModel.find({}).populate("expenses");
-        if (data) {
-            return res.status(200).json({
-                message: 'success',
-                data
-            })
-        } else {
-            return res.status(400).json({
-                message: 'Failed'
-            })
-        }
-    } catch (err) {
-        return res.status(500).json({
-            error: err
-        });
-    }
-});
-
-app.get('/users/:email', async (req, res) => {
-    try {
-        const data = await UsersModel.find({
-            email: req.params.email
-        }).populate("expenses");
-        if (data) {
-            return res.status(200).json({
-                message: 'success',
-                data
-            })
-        } else {
-            return res.status(400).json({
-                message: 'Failed'
-            })
-        }
-    } catch (err) {
-        return res.status(500).json({
-            error: err
-        });
-    }
-});
-
-app.put('/expenses', async (req, res) => {
-    try {
-        let data = await UsersModel.findOne({
-            email: req.body.email
-        });
-        let expense = new ExpenseModel(req.body.expense)
-        let expenseInfo = await expense.save();
-        data.expenses.push(expenseInfo._id);
-
-        let updateExp = await UsersModel.updateOne({
-            email: req.body.email
-        }, data);
-        if (updateExp) {
-            return res.status(200).json({
-                message: 'success',
-                updateExp
-            })
-        } else {
-            return res.status(400).json({
-                message: 'Failed'
-            })
-        }
-    } catch (err) {
-        return res.status(500).json({
-            error: err
-        });
-    }
-});
-
-
-app.put('/approve', async (req, res) => {
-    try {
-        let totalAmt = 0;
-        let data = await UsersModel.find().populate("expenses");;
-        let numOfEmps = data.length - 1;
-        console.log('data => ', data)
-        await req.body.forEach((element) => {
-            let sumAmount = _.sumBy(element.expenses, function (o) {
-                return parseInt(o.amount);
-            });
-            totalAmt += sumAmount;
-        });
-
-        let settlementAmount = (totalAmt / numOfEmps);
-        await data.forEach(async (element) => {
-            element.dueAmount = 0;
-            element.settlementAmount = 0;
-            if (element.role !== 'ADMIN') {
-                let empTotalAmount = _.sumBy(element.expenses, function (o) {
-                    return parseInt(o.amount);
-                });
-                if (empTotalAmount > settlementAmount) {
-                    element.dueAmount = empTotalAmount - settlementAmount;
-                    element.settlementAmount = 0;
-                } else if (settlementAmount === empTotalAmount) {
-                    element.settlementAmount = 0;
-                } else {
-                    element.settlementAmount = settlementAmount;
-                }
-                console.log(element.email);
-                console.log('Dena he', element.settlementAmount);
-                console.log('Lena he ', element.dueAmount);
-                await UsersModel.updateOne({
-                    email: element.email
-                }, element);
-            }
-        });
-        return res.status(200).json({
-            message: 'approved success'
-        })
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({
-            error: err
-        });
-    }
-});
 
 
 app.listen(5000, () => {

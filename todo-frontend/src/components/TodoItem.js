@@ -10,11 +10,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from "@material-ui/icons/Delete";
 import Tooltip from '@material-ui/core/Tooltip';
 import Input from '@material-ui/core/Input';
-import uniqBy from 'lodash.uniqby';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
-export default function ToDoItem({item,isSubTask,todos,setTodos,
+export default function ToDoItem({item,isSubTask,todos,setTodos,updateTodoTask,
     onAddSubtask,onDeleteCall,onDeleteSubtaskCall,parentId}) {
 
     const [isParentEdit,setIsParentEdit] = useState(false);
@@ -29,14 +28,15 @@ export default function ToDoItem({item,isSubTask,todos,setTodos,
 
     const updateTask = () =>{
         setIsParentEdit(false);
-        const filtered = todos && todos.filter(item => item.id !== editTodo.id)
-        console.log('---> before ',filtered)
-        const a = editTodo ? filtered.push(editTodo) : '';
-        console.log('---> ',filtered)
-        const updatedTodos = uniqBy(filtered, 'id')
-        // const set = new Set([...todos, editTodo]);
-        setTodos && setTodos(updatedTodos)
-        console.log(updatedTodos)
+        // const filtered = todos && todos.filter(item => item.id !== editTodo.id)
+        // console.log('---> before ',filtered)
+        // const a = editTodo ? filtered.push(editTodo) : '';
+        // console.log('---> ',filtered)
+        // const updatedTodos = uniqBy(filtered, 'id')
+        // // const set = new Set([...todos, editTodo]);
+        // setTodos && setTodos(updatedTodos)
+        // console.log(updatedTodos)
+        updateTodoTask(editTodo)
         setEditTodo('')
     }
 
@@ -44,7 +44,7 @@ export default function ToDoItem({item,isSubTask,todos,setTodos,
         setIsParentEdit(false);
         console.log('click away')
         const foundParent = findParentNode(parentId);
-        console.log('foundParent ',foundParent)
+        console.log('foundParent before ',foundParent)
         const filtered = foundParent?.subtasks?.filter(item => item.id !== editTodo.id);
         
         console.log('filtered ',filtered)
@@ -54,25 +54,37 @@ export default function ToDoItem({item,isSubTask,todos,setTodos,
             console.log('else part')
             filtered?.push(editTodo);
             console.log('filtered elese',filtered)
-            foundParent.subtasks = filtered
+            foundParent.subtasks = filtered;
+            foundParent.subtasks = foundParent.subtasks.filter((b)=>{
+                if(b) return b
+            })
         }
-        console.log(todos)
-        todos.push(foundParent);
+        console.log('foundParent =>after ',foundParent)
         
-        const updatedTodos = uniqBy(todos, 'id')
-        console.log(updatedTodos)
-        setTodos && setTodos(updatedTodos)
-        setEditTodo('')
+        updateTodoTask(foundParent)
+        // todos.push(foundParent);
+        
+        // const updatedTodos = uniqBy(todos, 'id')
+        // console.log(updatedTodos)
+        // setTodos && setTodos(updatedTodos)
+        // setEditTodo('')
     }
 
     const handleClickAway = () => {
-        console.log('away',editTodo)
-        if(isSubTask && editTodo){
+        console.log('away ',editTodo)
+        if(isSubTask){
             updateSubTask()
+        }else{
+            updateTodoTask(editTodo)
         }
-        else if(editTodo){
-            updateTask()
-        }
+        // updateTodoTask(editTodo)
+        setIsParentEdit(false);
+        // if(isSubTask && editTodo){
+        //     updateSubTask()
+        // }
+        // else if(editTodo){
+        //     updateTask()
+        // }
     };
 
     
@@ -159,3 +171,4 @@ export default function ToDoItem({item,isSubTask,todos,setTodos,
     </ClickAwayListener>
     );
   }
+  

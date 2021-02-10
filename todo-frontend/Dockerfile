@@ -26,4 +26,4 @@ COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 # CMD [ "http-server", "dist" ]
-CMD ["nginx","-g","deamon off;"]
+# CMD ["nginx","-g","deamon off;"]

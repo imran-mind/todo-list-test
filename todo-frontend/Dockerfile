@@ -1,4 +1,4 @@
-FROM node
+FROM node as build-stage
 
 # install simple http server for serving static content
 RUN npm install -g http-server

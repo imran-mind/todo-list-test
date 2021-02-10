@@ -1,3 +1,4 @@
+version: "3"
 services:
   react-app:
     container_name: client-container
@@ -26,6 +27,7 @@ services:
       - mern-app
     volumes:
       - mongo-data:/data/db
+
 networks:
   mern-app:
     driver: bridge

@@ -5,7 +5,7 @@ const UsersModel = require('./models/user.model');
 const Event = require('./models/event.model');
 var cors = require('cors');
 const auth = require('./auth');
-
+const db = require('./mongo');
 // support parsing of application/json type post data
 app.use(bodyParser.json());
 

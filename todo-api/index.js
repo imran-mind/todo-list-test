@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(cors());
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         const data = await UsersModel.find({
             username: req.body.username,
@@ -39,7 +39,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/todos', auth.ensureAuthenticated, async(req,res)=>{
+app.post('/api/todos', auth.ensureAuthenticated, async(req,res)=>{
     console.log(req.body)
     // const user = auth.decodeToken(req.headers.authorization,)
     const {username} = req.userInfo;
@@ -59,7 +59,7 @@ app.post('/todos', auth.ensureAuthenticated, async(req,res)=>{
     }
 });
 
-app.get('/todos', auth.ensureAuthenticated, async(req,res)=>{
+app.get('/api/todos', auth.ensureAuthenticated, async(req,res)=>{
     console.log('todo get all records ')
     try {
         const {username} = req.userInfo;
@@ -82,7 +82,7 @@ app.get('/todos', auth.ensureAuthenticated, async(req,res)=>{
     }
 });
 
-app.put('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
+app.put('/api/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
     console.log('todo updating call id ',req.params.id,req.body)
     try {
         let data = await Event.findOne({
@@ -111,7 +111,7 @@ app.put('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
 });
 
 
-app.delete('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
+app.delete('/api/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
     console.log('todo deleting call id ',req.params.id)
     try {
         let data = await Event.deleteOne({
@@ -136,7 +136,7 @@ app.delete('/todos/:id', auth.ensureAuthenticated, async(req,res)=>{
 });
 
 
-app.post('/signup', async (req, res) => {
+app.post('/api/signup', async (req, res) => {
     console.log('signup body ->',req.body)
     let userInfo = new UsersModel(req.body);
     const data = await UsersModel.find({

@@ -1,4 +1,4 @@
-ervices:
+services:
   react-app:
     container_name: client-container
     restart: always

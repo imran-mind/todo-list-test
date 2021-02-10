@@ -1,30 +1,34 @@
-version: '3.8'
-services: 
-  api:
-    container_name: api-container
-    restart: always
-    build: ./todo-api
-    ports: 
-      - "5000:5000"
-    depends_on: 
-      - mongo
-  client:
+ervices:
+  react-app:
     container_name: client-container
     restart: always
     build: ./todo-frontend
+    stdin_open: true
     ports: 
+      - "5000:5000"
+    networks:
+      - mern-app
+  api-server:
+    container_name: api-container
+    restart: always
+    build: ./todo-api
+    ports:
       - "8080:8080"
-    depends_on: 
-      - api
+    networks:
+      - mern-app
+    depends_on:
+      - mongo
   mongo:
-    container_name: mongo-backend
-    image: mongo
-    expose: 
-      - "27017"
-    ports: 
+    image: mongo:3.6.19-xenial
+    ports:
       - "27017:27017"
-    volumes: 
-      - apiDB:/data/db
-
-volumes: 
-  apiDB:
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local

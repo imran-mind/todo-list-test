@@ -25,6 +25,6 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy the default nginx.conf provided by tiangolo/node-frontend
 COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8181
 # CMD [ "http-server", "dist" ]
-CMD ["nginx","-g","deamon off;"]
+# CMD ["nginx","-g","deamon off;"]

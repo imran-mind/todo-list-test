@@ -15,16 +15,29 @@ COPY . /app/
 # build client for production with minification
 RUN npm run build
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.16.0-alpine
+# => Run container
+FROM nginx:1.16.0
 
-COPY --from=build-stage /app/build/ /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy the default nginx.conf provided by tiangolo/node-frontend
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
 
 EXPOSE 80
+
+# Start Nginx server
+CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+# FROM nginx:1.16.0-alpine
+
+# COPY --from=build-stage /app/build/ /usr/share/nginx/html
+
+# RUN rm /etc/nginx/conf.d/default.conf
+
+# # Copy the default nginx.conf provided by tiangolo/node-frontend
+# COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+# EXPOSE 80
 # CMD [ "http-server", "dist" ]
 # CMD ["nginx","-g","deamon off;"]

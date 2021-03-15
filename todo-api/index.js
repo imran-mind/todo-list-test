@@ -53,7 +53,7 @@ app.post('/api/todos', auth.ensureAuthenticated, async(req,res)=>{
             e
         });
     } catch (err) {
-        return res.status(500).jsonp({
+        return res.status(500).json({
             error: err
         });
     }

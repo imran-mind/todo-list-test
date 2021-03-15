@@ -1,4 +1,4 @@
-FROM tiangolo/node-frontend:10 as build-stage
+FROM node:10 as build
 
 # make the 'client' folder the current working directory
 WORKDIR /app

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudl-client-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cloudl-client
+    spec:
+      containers:
+        - name: cloudl-client
+          image: imran1mind313/frontend-test:latest
+          ports:
+            - containerPort: 80
+              name: http-port
+          env:
+            - name: CLOUDL_SERVER
+              value: cloudl-server-service
+  selector:
+    matchLabels:
+      app: cloudl-client

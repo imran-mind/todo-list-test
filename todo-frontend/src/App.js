@@ -6,7 +6,7 @@ import Login from './components/Login';
 function App() {
   return (
     <div className="App">
-      <Router>
+      {/* <Router>
         <Switch>
           <Route exact path="/">
             <Login/>
@@ -15,7 +15,8 @@ function App() {
             <TodoList/>
           </Route>
         </Switch>
-      </Router>
+      </Router> */}
+      <h1>React Successfully deployed on K8s Cluster with Nginx</h1>
     </div>
   );
 }
